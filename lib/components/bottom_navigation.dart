@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tcwdapp/pages/concern/concern.dart';
 import 'package:tcwdapp/pages/dashboard/dashboard.dart';
 import 'package:tcwdapp/pages/profile/profile.dart';
 import 'package:tcwdapp/pages/transaction/transaction.dart';
@@ -16,6 +17,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
     Transaction(),
+    Concern(),
     Profile()
   ];
 
@@ -30,7 +32,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'User Name',
+          'TCWD System',
           style: TextStyle(fontSize: 15),
         ),
       ),
@@ -41,16 +43,20 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
+            label: 'Bills',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
             label: 'Transactions',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_2),
-            label: 'Profile',
+            icon: Icon(Icons.support_agent),
+            label: 'Concerns',
           ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.person_2),
+          //   label: 'Profile',
+          // ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.cyan[600],
