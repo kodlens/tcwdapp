@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tcwdapp/login.dart';
 import 'package:tcwdapp/pages/homepage.dart';
+import 'package:tcwdapp/pages/meter_reader/reader_homepage.dart';
 
 void main() {
   runApp(const StartPage());
@@ -20,6 +21,7 @@ class StartPage extends StatelessWidget {
         //'/': (context) => HomePage(),
         //register the routes here...
         '/homepage': (context) => const HomePage(),
+        '/reader_homepage': (context) => const ReaderHomePage(),
         // '/my-account': (context) => const MyAccount(),
       },
     );

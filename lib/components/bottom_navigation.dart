@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tcwdapp/pages/concern/concern.dart';
-import 'package:tcwdapp/pages/dashboard/dashboard.dart';
+import 'package:tcwdapp/pages/user/concern/concern.dart';
+import 'package:tcwdapp/pages/user/dashboard/dashboard.dart';
 import 'package:tcwdapp/pages/profile/profile.dart';
-import 'package:tcwdapp/pages/transaction/transaction.dart';
+import 'package:tcwdapp/pages/user/transaction/transaction.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
   const MyBottomNavigationBar({super.key});

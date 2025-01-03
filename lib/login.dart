@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tcwdapp/components/password_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,8 +50,18 @@ class _LoginState extends State<Login> {
   _saveToSharedPreferences(String value) async {
     //save response (user information)
     await _pref.setString('user', value);
+
+    final user = jsonDecode(value);
+
+    final String role = user['user']['role'].toLowerCase();
     if (context.mounted) {
-      Navigator.of(context).pushReplacementNamed('/homepage');
+      if (role == 'user') {
+        Navigator.of(context).pushReplacementNamed('/homepage');
+      }
+
+      if (role == 'reader') {
+        Navigator.of(context).pushReplacementNamed('/reader_homepage');
+      }
     }
   }
 
@@ -92,8 +104,6 @@ class _LoginState extends State<Login> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         }
-
-        print(e.response!.data['logs']);
 
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx and is also not 304.

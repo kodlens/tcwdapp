@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tcwdapp/pages/user/dashboard/components/list_of_bill.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -58,34 +59,7 @@ class Dashboard extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        Card(
-          color: Colors.cyan,
-          elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(30, 30, 10, 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Previous Reading',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  '1002534',
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
+        ListOfBill()
       ],
     );
   }
