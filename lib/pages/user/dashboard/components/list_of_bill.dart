@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../connection.dart';
+import 'package:intl/intl.dart';
 
 class ListOfBill extends StatefulWidget {
   const ListOfBill({super.key});
@@ -33,32 +35,17 @@ class _ListOfBillState extends State<ListOfBill> {
     _pref = await SharedPreferences.getInstance();
     userAccount = _pref.getString('user') ?? '{}';
     user = jsonDecode(userAccount);
-    String userId = user['user']['id'];
-
-    dynamic response = await dio.get('$ip/user-bills/$userId');
-
-    print(response);
-
-    return response;
+    int userId = user['user']['id'];
+    dynamic response = await dio.get('$ip/api/user-bills/$userId');
+    return response.data;
   }
 
-  Widget cardTemplate(data) {
-    return const InkWell(
-      child: Card(
-        margin: EdgeInsets.fromLTRB(15, 10, 15, 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-                padding: EdgeInsets.all(10),
-                child: Text('Smaple card template information')),
-            SizedBox(
-              height: 1.5,
-            )
-          ],
-        ),
-      ),
-    );
+  Future<void> refreshData() async {
+    // Simulate fetching new data
+    //await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      _future = fetchData();
+    });
   }
 
   @override
@@ -75,17 +62,145 @@ class _ListOfBillState extends State<ListOfBill> {
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            final lists = snapshot.data!;
-            return const Card(
-              margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
-                    child: Text('Sample'),
-                  ),
-                ],
+            final data = snapshot.data!;
+
+            if (data.isEmpty) {
+              return const Padding(
+                padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
+                child: Text('No billing available...'),
+              );
+            }
+
+            return Expanded(
+              // Use Expanded to make ListView take remaining space
+              child: ListView.builder(
+                itemCount: data.length, // Number of items in the list
+                itemBuilder: (context, index) {
+                  return Card(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero),
+                    child: InkWell(
+                      onTap: () {},
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //Billing date
+                              // Billing Date
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 5, bottom: 0, top: 5),
+                                child: Text(
+                                  "BILLING DATE",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(
+                                        color: Colors.grey[
+                                            600], // Lighter text for label
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 5.0, bottom: 12.0),
+                                child: Text(
+                                  DateFormat('MMM. dd, yyyy').format(
+                                    DateTime.parse(data[index]['created_at']),
+                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors
+                                            .black87, // Dark text for data
+                                      ),
+                                ),
+                              ),
+
+                              //DUE DATE
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 5, bottom: 0),
+                                child: Text(
+                                  "DUE DATE",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(
+                                        color: Colors.grey[
+                                            600], // Lighter text for label
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 5.0, bottom: 5),
+                                child: Text(
+                                  DateFormat('MMM. dd, yyyy').format(
+                                    DateTime.parse(data[index]['due_date']),
+                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors
+                                            .black87, // Dark text for data
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          //balance/total container
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 5, bottom: 0),
+                                child: Text(
+                                  "TOTAL",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(
+                                        color: Colors.grey[
+                                            600], // Lighter text for label
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: Text(
+                                  data[index]['total'].toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors
+                                            .black87, // Dark text for data
+                                      ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ), // Example list item
+                    ),
+                  );
+                },
               ),
             );
           }

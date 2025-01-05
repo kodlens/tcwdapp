@@ -110,7 +110,7 @@ class _LoginState extends State<Login> {
         //final String errMsg = '';
 
         if (e.response != null) {
-          final errMsg = e.response!.data['logs'].toString();
+          final errMsg = e.response!.data['message'].toString();
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(errMsg),

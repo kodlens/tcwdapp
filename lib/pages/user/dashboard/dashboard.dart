@@ -7,6 +7,7 @@ class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Card(
           color: Colors.cyan,
@@ -57,7 +58,14 @@ class Dashboard extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 10,
+          height: 20,
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+          child: Text(
+            "BILLINGS",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
         ListOfBill()
       ],

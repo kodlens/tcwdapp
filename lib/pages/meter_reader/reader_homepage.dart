@@ -8,7 +8,7 @@ class ReaderHomePage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Meter Reader'),
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.cyan[600],
         ),
         drawer: Drawer(
           // Add a ListView to the drawer. This ensures the user can scroll
@@ -22,20 +22,26 @@ class ReaderHomePage extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.blue,
                 ),
-                child: Text('Drawer Header'),
+                child: Text('MENU', style: TextStyle(color: Colors.white)),
               ),
               ListTile(
-                title: const Text('Item 1'),
+                leading: const Icon(Icons.gas_meter,
+                    color: Colors.cyan), // Icon here
+                title: const Text('Meter Reading'),
                 onTap: () {
                   // Update the state of the app.
                   // ...
+                  Navigator.of(context).pushNamed('/meter-reading');
                 },
               ),
               ListTile(
-                title: const Text('Item 2'),
+                leading: const Icon(Icons.electric_meter,
+                    color: Colors.cyan), // Icon here
+                title: const Text('New Reading'),
                 onTap: () {
                   // Update the state of the app.
                   // ...
+                  Navigator.of(context).pushNamed('/add-edit-meter-reading');
                 },
               ),
             ],
