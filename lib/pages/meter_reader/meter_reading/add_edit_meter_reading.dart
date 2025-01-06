@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+
+import '../../connection.dart';
 
 class AddEditMeterReading extends StatefulWidget {
   const AddEditMeterReading({super.key});
@@ -13,6 +16,8 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
   final consumerDateReading = TextEditingController();
   final consumerNameController = TextEditingController();
   final consumerCurrentReading = TextEditingController();
+  final dio = Dio();
+  String ip = Connection.ip;
 
   void submit() {
     if (_formKey.currentState!.validate()) {}
@@ -34,6 +39,27 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
             "${picked.toLocal()}".split(' ')[0]; // Format date as 'YYYY-MM-DD'
       });
     }
+  }
+
+  openModal(var context) async {
+    dynamic response = await dio.get('$ip/api/user-bills');
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Column(
+            children: [
+              Text("Sample"),
+              Text("sample 2"),
+              Text("sample 3"),
+            ],
+          ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(2))),
+        );
+      },
+    );
   }
 
   @override
@@ -60,17 +86,40 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Consumer Name"),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please input consumer name.';
-                        }
-                        return null;
-                      },
-                      controller: consumerNameController,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Consumer Name"),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please input consumer name.';
+                              }
+                              return null;
+                            },
+                            controller: consumerNameController,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        ElevatedButton.icon(
+                          label: const Text(""),
+                          onPressed: () {
+                            openModal(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                              minimumSize: const Size(80, 50),
+                              iconColor: Colors.white,
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.cyan),
+                          icon: const Icon(Icons.search),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
