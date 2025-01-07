@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:tcwdapp/classes/user.dart';
+import 'package:tcwdapp/pages/meter_reader/meter_reading/consumer_list.dart';
 
 import '../../connection.dart';
 
@@ -18,9 +20,64 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
   final consumerCurrentReading = TextEditingController();
   final dio = Dio();
   String ip = Connection.ip;
+  User? selectedUser; // This will store the selected user
+  bool _isLoading = false;
 
-  void submit() {
-    if (_formKey.currentState!.validate()) {}
+  void submit() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final response = await dio.post(
+        '$ip/api/save-user-bills',
+        data: {
+          'user_id': selectedUser?.id,
+          'readings': consumerCurrentReading.text,
+          'reading_date': consumerDateReading.text
+        },
+      );
+
+      if (context.mounted) {
+        if (response.statusCode == 200) {
+          setState(() {
+            _isLoading = false;
+          });
+          if (response.data['status'] == 'Success') {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('SAVED!'),
+                  content: const Text('Reading successfully saved.'),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            consumerCurrentReading.text = "";
+                            consumerDateReading.text = "";
+                            consumerNameController.text = "";
+                            selectedUser = null;
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("Ok"))
+                  ],
+                );
+              },
+            );
+          }
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   // Function to open the DatePicker
@@ -39,27 +96,6 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
             "${picked.toLocal()}".split(' ')[0]; // Format date as 'YYYY-MM-DD'
       });
     }
-  }
-
-  openModal(var context) async {
-    dynamic response = await dio.get('$ip/api/user-bills');
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const AlertDialog(
-          content: Column(
-            children: [
-              Text("Sample"),
-              Text("sample 2"),
-              Text("sample 3"),
-            ],
-          ),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(2))),
-        );
-      },
-    );
   }
 
   @override
@@ -107,7 +143,24 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
                         ElevatedButton.icon(
                           label: const Text(""),
                           onPressed: () {
-                            openModal(context);
+                            // openModal(context);
+                            //Navigator.of(context).pushNamed('/consumer-list');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ConsumerList(onUserSelected: (user) {
+                                  // When a user is selected, update the state of the parent scaffold
+                                  setState(() {
+                                    selectedUser = user;
+                                    consumerNameController.text =
+                                        '${user.fname} ${user.lname}';
+                                  });
+                                  Navigator.pop(
+                                      context); // Go back to the parent scaffold
+                                }),
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                               shape: const RoundedRectangleBorder(
@@ -145,6 +198,12 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
                         labelText: "Select Date",
                         border: OutlineInputBorder(),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select date.';
+                        }
+                        return null;
+                      },
                       readOnly: true, // Makes the field read-only
                       onTap: () {
                         // Open the date picker when tapped
@@ -160,7 +219,12 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
                           iconColor: Colors.white,
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.cyan),
-                      icon: const Icon(Icons.save),
+                      icon: _isLoading
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 3,
+                            )
+                          : const Icon(Icons.save),
                     )
                   ],
                 ),
