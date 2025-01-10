@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tcwdapp/pages/user/dashboard/user_bill.dart';
 
 import '../../../connection.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +23,8 @@ class _ListOfBillState extends State<ListOfBill> {
   late SharedPreferences _pref;
   late dynamic user;
   late String userAccount;
+  var formatter = NumberFormat('#,##,000');
+
 
   @override
   void initState() {
@@ -80,7 +83,15 @@ class _ListOfBillState extends State<ListOfBill> {
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        print(data[index]);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UserBill(userBill: data[index]),
+                          ),
+                        );
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -182,7 +193,7 @@ class _ListOfBillState extends State<ListOfBill> {
                               Padding(
                                 padding: const EdgeInsets.all(0),
                                 child: Text(
-                                  data[index]['total'].toString(),
+                                  formatter.format(data[index]['total']),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge

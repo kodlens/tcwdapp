@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tcwdapp/pages/meter_reader/components/reading_list.dart';
+import 'package:tcwdapp/pages/meter_reader/meter_reading/add_edit_meter_reading.dart';
 
 class ReaderHomePage extends StatelessWidget {
   const ReaderHomePage({super.key});
@@ -24,16 +26,16 @@ class ReaderHomePage extends StatelessWidget {
                 ),
                 child: Text('MENU', style: TextStyle(color: Colors.white)),
               ),
-              ListTile(
-                leading: const Icon(Icons.gas_meter,
-                    color: Colors.cyan), // Icon here
-                title: const Text('Meter Reading'),
-                onTap: () {
-                  // Update the state of the app.
-                  // ...
-                  Navigator.of(context).pushNamed('/meter-reading');
-                },
-              ),
+              // ListTile(
+              //   leading: const Icon(Icons.gas_meter,
+              //       color: Colors.cyan), // Icon here
+              //   title: const Text('Meter Reading'),
+              //   onTap: () {
+              //     // Update the state of the app.
+              //     // ...
+              //     Navigator.of(context).pushNamed('/meter-reading');
+              //   },
+              // ),
               ListTile(
                 leading: const Icon(Icons.electric_meter,
                     color: Colors.cyan), // Icon here
@@ -46,6 +48,27 @@ class ReaderHomePage extends StatelessWidget {
               ),
             ],
           ),
-        ));
+        ),
+        floatingActionButton: ElevatedButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AddEditMeterReading(),
+              ),
+            );
+          },
+          label: const Text("New"),
+          style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.5),
+              ),
+              minimumSize: const Size(80, 50),
+              iconColor: Colors.white,
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.cyan),
+          icon: const Icon(Icons.add),
+        ),
+        body: const ReadingList());
   }
 }
