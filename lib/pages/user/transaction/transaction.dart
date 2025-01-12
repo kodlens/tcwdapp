@@ -24,7 +24,6 @@ class _TransactionState extends State<Transaction> {
   var formatter = NumberFormat('#,##,000');
 
   Future<List<dynamic>> fetchData() async {
-
     _pref = await SharedPreferences.getInstance();
     userAccount = _pref.getString('user') ?? '{}';
     user = jsonDecode(userAccount);
@@ -57,7 +56,7 @@ class _TransactionState extends State<Transaction> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: Center(child: CircularProgressIndicator()),
               );
             } else if (snapshot.hasError) {
               return Center(

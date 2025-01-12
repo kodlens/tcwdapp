@@ -58,7 +58,7 @@ class _ListOfBillState extends State<ListOfBill> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: Center(child: CircularProgressIndicator()),
             );
           } else if (snapshot.hasError) {
             return Center(

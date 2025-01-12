@@ -16,7 +16,7 @@ class UserBill extends StatefulWidget {
 class _UserBillState extends State<UserBill> {
   bool loading = false;
   final String paymongoKey = Connection.paymongoKey;
-
+  final String ip = Connection.ip;
   final dio = Dio();
 
   void pay() async {
@@ -50,8 +50,8 @@ class _UserBillState extends State<UserBill> {
               'user_id': widget.userBill['user_id'],
             },
             'payment_method_types': ['card', 'gcash'],
-            'success_url': 'https://tcwd.kod-lens.tech/api/payment/success',
-            'cancel_url': 'https://tcwd.kod-lens.tech/view-user-bill/2',
+            'success_url': '$ip/api/payment/success',
+            'cancel_url': '$ip/view-user-bill/2',
             'description': 'Payment for the water bill.',
             'send_email_receipt': false,
           },
@@ -76,13 +76,16 @@ class _UserBillState extends State<UserBill> {
           MaterialPageRoute(
             builder: (context) => CheckoutPage(
               url: response.data['data']['attributes']['checkout_url'],
-              returnUrl: 'https://tcwd.kod-lens.tech',
+              returnUrl: '',
             ),
           ),
         );
 
         if (res) {
           print('HUmana');
+
+          final successResponse =
+              await dio.post('$ip/api//payment/success/mobile', data: {});
         }
       }
 

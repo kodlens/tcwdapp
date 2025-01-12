@@ -1,14 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Import for iOS features.
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 // ignore: public_member_api_docs
-class CheckoutPage extends StatefulWidget {
+class ConcernWidget extends StatefulWidget {
   // ignore: public_member_api_docs
 
-  const CheckoutPage({
+  const ConcernWidget({
     super.key,
     required this.url,
     this.returnUrl,
@@ -18,10 +21,10 @@ class CheckoutPage extends StatefulWidget {
   final String? returnUrl;
 
   @override
-  State<CheckoutPage> createState() => _CheckoutPageState();
+  State<ConcernWidget> createState() => _ConcernWidgetState();
 }
 
-class _CheckoutPageState extends State<CheckoutPage> {
+class _ConcernWidgetState extends State<ConcernWidget> {
   late final WebViewController _webViewController;
 
   @override

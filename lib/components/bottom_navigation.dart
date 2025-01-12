@@ -49,10 +49,10 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
             icon: Icon(Icons.history),
             label: 'Transactions',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.support_agent),
-          //   label: 'Concerns',
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.support_agent),
+            label: 'Concerns',
+          ),
           // BottomNavigationBarItem(
           //   icon: Icon(Icons.person_2),
           //   label: 'Profile',
