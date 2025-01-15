@@ -5,6 +5,7 @@ import 'package:tcwdapp/components/password_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'package:tcwdapp/pages/connection.dart';
+import 'package:tcwdapp/pages/user/registration/registration_page.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -86,7 +87,6 @@ class _LoginState extends State<Login> {
           },
         );
 
-
         if (!context.mounted) return;
 
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -135,8 +135,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    print('paulit2');
-
     return Scaffold(
       body: Form(
           key: _formKey,
@@ -144,13 +142,14 @@ class _LoginState extends State<Login> {
               child: Center(
             child: Container(
               decoration: const BoxDecoration(
-                gradient: LinearGradient(
+                gradient: RadialGradient(
                   colors: [
                     Color.fromRGBO(255, 255, 255, 1),
-                    Color.fromRGBO(175, 218, 247, 1),
+                    Color.fromRGBO(112, 187, 236, 1),
                   ], // Two colors for the gradient
-                  begin: Alignment.topCenter, // Start from the left
-                  end: Alignment.bottomCenter, // End at the right
+                  center: Alignment.center,
+                  radius: 1, // Start from the left
+                  stops: [0.0, 1.0], // End at the right
                 ),
               ),
               child: Column(
@@ -158,8 +157,8 @@ class _LoginState extends State<Login> {
                 children: [
                   const Image(
                       image: AssetImage('assets/images/tcwd-logo.png'),
-                      height: 150),
-                  const SizedBox(height: 15),
+                      height: 120),
+                  const SizedBox(height: 1),
                   const Padding(
                     padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                     child: Text(
@@ -172,7 +171,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 1,
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -193,27 +192,51 @@ class _LoginState extends State<Login> {
                   const SizedBox(
                     height: 20,
                   ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegistrationPage()),
+                      );
+                    },
+                    child: const Text(
+                      "Don't have account yet? Register here",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration
+                            .underline, // Adds the link-like effect
+                      ),
+                    ),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(50),
                         elevation: 0,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
-                        ),
                         backgroundColor: Colors.cyan[600],
                       ),
                       onPressed: () {
                         loginSubmit();
                       },
-                      label: _isLoading ? const Text('') : const Text('LOGIN'),
+                      label: const Text(
+                        'LOGIN',
+                        style: TextStyle(color: Colors.white),
+                      ),
                       icon: _isLoading
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 3,
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 3,
+                              ),
                             )
-                          : const Icon(Icons.login),
+                          : const Icon(
+                              Icons.login,
+                              color: Colors.white,
+                            ),
                     ),
                   )
                 ],

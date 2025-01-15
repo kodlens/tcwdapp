@@ -44,7 +44,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       ..setNavigationDelegate(
         NavigationDelegate(onNavigationRequest: (request) {
           if (request.url.contains('success')) {
-            // Navigator.pop(context, true);
+            Navigator.pop(context, true);
             print(request.url);
             return NavigationDecision.prevent;
           }

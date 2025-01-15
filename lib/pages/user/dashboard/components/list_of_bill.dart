@@ -16,7 +16,7 @@ class ListOfBill extends StatefulWidget {
   State<ListOfBill> createState() => _ListOfBillState();
 }
 
-class _ListOfBillState extends State<ListOfBill> {
+class _ListOfBillState extends State<ListOfBill> with WidgetsBindingObserver {
   late Future<List<dynamic>> _future;
   final dio = Dio();
   String ip = Connection.ip;
@@ -25,13 +25,13 @@ class _ListOfBillState extends State<ListOfBill> {
   late String userAccount;
   var formatter = NumberFormat('#,##,000');
 
-
   @override
   void initState() {
     // TODO: implement initState
 
     _future = fetchData();
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   Future<List<dynamic>> fetchData() async {
@@ -52,13 +52,30 @@ class _ListOfBillState extends State<ListOfBill> {
   }
 
   @override
+  void dispose() {
+    // Unregister the observer to avoid memory leaks
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      // When the app comes to the foreground, refresh the page
+      refreshData();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: Center(child: CircularProgressIndicator()),
+              child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
             return Center(
@@ -74,8 +91,8 @@ class _ListOfBillState extends State<ListOfBill> {
               );
             }
 
-            return Expanded(
-              // Use Expanded to make ListView take remaining space
+            return RefreshIndicator(
+              onRefresh: refreshData,
               child: ListView.builder(
                 itemCount: data.length, // Number of items in the list
                 itemBuilder: (context, index) {
@@ -84,11 +101,11 @@ class _ListOfBillState extends State<ListOfBill> {
                         borderRadius: BorderRadius.zero),
                     child: InkWell(
                       onTap: () {
-                        print(data[index]);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => UserBill(userBill: data[index]),
+                            builder: (context) =>
+                                UserBill(userBill: data[index]),
                           ),
                         );
                       },
@@ -120,7 +137,9 @@ class _ListOfBillState extends State<ListOfBill> {
                                     left: 5.0, bottom: 12.0),
                                 child: Text(
                                   DateFormat('MMM. dd, yyyy').format(
-                                    DateTime.parse(data[index]['created_at']),
+                                    DateTime.parse(data[index]
+                                            ['reading_date'] ??
+                                        '1970-01-01'),
                                   ),
                                   style: Theme.of(context)
                                       .textTheme
@@ -155,7 +174,8 @@ class _ListOfBillState extends State<ListOfBill> {
                                     const EdgeInsets.only(left: 5.0, bottom: 5),
                                 child: Text(
                                   DateFormat('MMM. dd, yyyy').format(
-                                    DateTime.parse(data[index]['due_date']),
+                                    DateTime.parse(
+                                        data[index]['due_date'] ?? ''),
                                   ),
                                   style: Theme.of(context)
                                       .textTheme
@@ -193,7 +213,7 @@ class _ListOfBillState extends State<ListOfBill> {
                               Padding(
                                 padding: const EdgeInsets.all(0),
                                 child: Text(
-                                  formatter.format(data[index]['total']),
+                                  formatter.format(data[index]['total'] ?? ''),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge

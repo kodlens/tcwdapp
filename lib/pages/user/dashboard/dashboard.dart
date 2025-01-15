@@ -16,21 +16,19 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
   final searchTextController = TextEditingController();
   late Future<List<dynamic>> _future;
   final dio = Dio();
   String ip = Connection.ip;
   late SharedPreferences _pref;
-  late Map<String,dynamic> user;
+  late Map<String, dynamic> user;
   late String userAccount;
   late String name = '';
   late String meterNo = '';
   late String totalBalance = "0";
   var formatter = NumberFormat('#,##,000');
 
-
-  void loadUser()  async{
+  void loadUser() async {
     _pref = await SharedPreferences.getInstance();
     userAccount = _pref.getString('user') ?? '{}';
     setState(() {
@@ -40,10 +38,9 @@ class _DashboardState extends State<Dashboard> {
     });
 
     loadBalance(user);
-
   }
-  void loadBalance(dynamic myUser) async {
 
+  void loadBalance(dynamic myUser) async {
     dynamic response = await dio.get('$ip/api/user-bill-sum/${myUser["id"]}');
 
     setState(() {
@@ -51,13 +48,11 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-   loadUser();
+    loadUser();
   }
 
   @override
@@ -143,7 +138,9 @@ class _DashboardState extends State<Dashboard> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
-        const ListOfBill()
+        const Expanded(
+          child: ListOfBill(),
+        )
       ],
     );
   }

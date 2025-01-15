@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tcwdapp/pages/connection.dart';
 
 import 'package:tcwdapp/pages/user/dashboard/checkout.dart';
@@ -25,13 +26,19 @@ class _UserBillState extends State<UserBill> {
     });
 
     try {
+      final String name = widget.userBill['lname'] +
+              ', ' +
+              widget.userBill['fname'] +
+              ' ' +
+              widget.userBill['mname'] ??
+          '';
       Map<String, dynamic> paymentData = {
         'data': {
           'attributes': {
             'billing': {
-              'email': 'juan@mail.com',
-              'name': 'Juan Dela Cruz',
-              'phone': '9167789585',
+              'email': widget.userBill['email'],
+              'name': name,
+              'phone': widget.userBill['contact_no'],
             },
             'line_items': [
               {
@@ -85,7 +92,27 @@ class _UserBillState extends State<UserBill> {
           print('HUmana');
 
           final successResponse =
-              await dio.post('$ip/api//payment/success/mobile', data: {});
+              await dio.post('$ip/api/payment/success/mobile',
+                  data: {
+                    'billing_id': widget.userBill['id'],
+                    'amount': widget.userBill['total'],
+                    'user_id': widget.userBill['user_id']
+                  },
+                  options: Options(
+                      headers: {'Accept': 'application/json'},
+                      followRedirects: false,
+                      validateStatus: (status) {
+                        return status! < 500;
+                      }));
+
+          //print(successResponse.data);
+          if (successResponse.data['status'] == 'success') {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text(
+                  'Payment successfull. You may go back to Bill page.'),
+              backgroundColor: Colors.green.shade300,
+            ));
+          }
         }
       }
 
@@ -105,7 +132,7 @@ class _UserBillState extends State<UserBill> {
   @override
   void initState() {
     // TODO: implement initState
-    print(widget.userBill);
+    print(widget.userBill['email']);
   }
 
   @override
@@ -127,7 +154,9 @@ class _UserBillState extends State<UserBill> {
                 ),
                 TextFormField(
                   controller: TextEditingController(
-                      text: widget.userBill['reading_date']),
+                      text: DateFormat('MMM. dd, yyyy').format(
+                    DateTime.parse(widget.userBill['reading_date']),
+                  )),
                   readOnly: true,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(), labelText: ""),
@@ -143,8 +172,10 @@ class _UserBillState extends State<UserBill> {
                   readOnly: true,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(), labelText: ""),
-                  controller:
-                      TextEditingController(text: widget.userBill['due_date']),
+                  controller: TextEditingController(
+                      text: DateFormat('MMM. dd, yyyy').format(
+                    DateTime.parse(widget.userBill['due_date']),
+                  )),
                 ),
                 const SizedBox(
                   height: 10,

@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tcwdapp/pages/connection.dart';
 
+import 'components/transaction_card.dart';
+
 class Transaction extends StatefulWidget {
   const Transaction({super.key});
 
@@ -50,159 +52,52 @@ class _TransactionState extends State<Transaction> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FutureBuilder(
-          future: _future,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: Center(child: CircularProgressIndicator()),
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text('Error: ${snapshot.error}'),
-              );
-            } else {
-              final data = snapshot.data!;
-              return Expanded(
-                child: ListView.builder(
+        const Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Card(
+              color: Colors.cyan,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
+                child: Text(
+                  'TRANSACTION',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+          child: FutureBuilder(
+            future: _future,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: CircularProgressIndicator()),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              } else {
+                final data = snapshot.data!;
+                return ListView.builder(
                   itemCount: data.length,
                   itemBuilder: (context, index) {
-                    return Card(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero),
-                      child: InkWell(
-                        onTap: () {},
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    //Billing date
-                                    // Billing Date
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5, bottom: 0, top: 5),
-                                      child: Text(
-                                        "Type",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall
-                                            ?.copyWith(
-                                              color: Colors.grey[
-                                                  600], // Lighter text for label
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5.0, bottom: 12.0),
-                                      child: Text(
-                                        "${data[index]['type']}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge
-                                            ?.copyWith(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.normal,
-                                              color: Colors
-                                                  .black87, // Dark text for data
-                                            ),
-                                      ),
-                                    ),
-
-                                    //DUE DATE
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5, bottom: 0),
-                                      child: Text(
-                                        "TRANSACTION DATE",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall
-                                            ?.copyWith(
-                                              color: Colors.grey[
-                                                  600], // Lighter text for label
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5.0, bottom: 5),
-                                      child: Text(
-                                        // DateFormat('MMM. dd, yyyy').format(
-                                        //   DateTime.parse(item['billing_date']),
-                                        // ),
-                                        "${data[index]['created_at']}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge
-                                            ?.copyWith(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.normal,
-                                              color: Colors
-                                                  .black87, // Dark text for data
-                                            ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 5, bottom: 0),
-                                  child: Text(
-                                    "PAYMENT:",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                          color: Colors.grey[
-                                              600], // Lighter text for label
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 5.0, bottom: 0),
-                                  child: Text(
-                                    formatter.format(data[index]['amount']),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.copyWith(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal,
-                                          color: Colors
-                                              .black87, // Dark text for data
-                                        ),
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    );
+                    return TransctionCard(data: data, index: index);
                   },
-                ),
-              );
-            }
-          },
+                );
+              }
+            },
+          ),
         )
       ],
     );
