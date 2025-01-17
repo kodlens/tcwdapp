@@ -22,61 +22,99 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
   final dio = Dio();
   String ip = Connection.ip;
   User? selectedUser; // This will store the selected user
-  bool _isLoading = false;
+  bool loading = false;
 
   void submit() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
-        _isLoading = true;
+        loading = true;
       });
 
-      final response = await dio.post(
-        '$ip/api/store-meter-billing',
-        data: {
+      try {
+        print({
           'meter_no': selectedUser?.meterNo,
           'readings': consumerCurrentReading.text,
           'reading_date': consumerDateReading.text
-        },
-      );
+        });
 
-      if (context.mounted) {
-        if (response.statusCode == 200) {
-          setState(() {
-            _isLoading = false;
-          });
-          if (response.data['status'] == 'Success') {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('SAVED!'),
-                  content: const Text('Reading successfully saved.'),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          setState(() {
-                            consumerCurrentReading.text = "";
-                            consumerDateReading.text = "";
-                            consumerNameController.text = "";
-                            selectedUser = null;
-                          });
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text("Ok"))
-                  ],
-                );
-              },
-            );
+        final response = await dio.post(
+          '$ip/api/store-meter-billing',
+          data: {
+            'meter_no': selectedUser?.meterNo,
+            'readings': consumerCurrentReading.text,
+            'reading_date': consumerDateReading.text
+          },
+        );
+
+        if (context.mounted) {
+          if (response.statusCode == 200) {
+            setState(() {
+              loading = false;
+            });
+            if (response.data['status'] == 'Success') {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('SAVED!'),
+                    content: const Text('Reading successfully saved.'),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            setState(() {
+                              consumerCurrentReading.text = "";
+                              consumerDateReading.text = "";
+                              consumerNameController.text = "";
+                              selectedUser = null;
+                            });
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Ok"))
+                    ],
+                  );
+                },
+              );
+            }
+          } else {
+            setState(() {
+              loading = false;
+            });
+          }
+        }
+      } on DioException catch (e) {
+        setState(() {
+          loading = false;
+        });
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        }
+
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx and is also not 304.
+        //final String errMsg = '';
+
+        if (e.response != null) {
+          final errMsg = e.response!.data['message'].toString();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(errMsg),
+              backgroundColor: Colors.red.shade300,
+            ));
           }
         } else {
-          setState(() {
-            _isLoading = false;
-          });
+          // Something happened in setting up or sending the request that triggered an Error
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(e.message.toString()),
+              backgroundColor: Colors.red.shade300,
+            ));
+          }
         }
       }
     } else {
       setState(() {
-        _isLoading = false;
+        loading = false;
       });
     }
   }
@@ -220,12 +258,19 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
                           iconColor: Colors.white,
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.cyan),
-                      icon: _isLoading
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 3,
+                      icon: loading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 3,
+                              ),
                             )
-                          : const Icon(Icons.save),
+                          : const Icon(
+                              Icons.save,
+                              color: Colors.white,
+                            ),
                     )
                   ],
                 ),

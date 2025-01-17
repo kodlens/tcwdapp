@@ -108,11 +108,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
         return false;
       },
       child: Scaffold(
+          appBar: AppBar(
+            title: const Text("Checkout"),
+          ),
           body: SafeArea(
-        child: WebViewWidget(
-          controller: _webViewController,
-        ),
-      )),
+            child: WebViewWidget(
+              controller: _webViewController,
+            ),
+          )),
     );
   }
 }

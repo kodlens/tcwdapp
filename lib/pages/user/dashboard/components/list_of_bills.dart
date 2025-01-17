@@ -24,7 +24,7 @@ class _ListOfBillsState extends State<ListOfBills> with WidgetsBindingObserver {
   late SharedPreferences _pref;
   late dynamic user;
   late String userAccount;
-  var formatter = NumberFormat('#,##,000');
+  var formatter = NumberFormat('#,###');
 
   @override
   void initState() {

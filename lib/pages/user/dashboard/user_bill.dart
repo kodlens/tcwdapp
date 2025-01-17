@@ -27,11 +27,10 @@ class _UserBillState extends State<UserBill> {
 
     try {
       final String name = widget.userBill['lname'] +
-              ', ' +
-              widget.userBill['fname'] +
-              ' ' +
-              widget.userBill['mname'] ??
-          '';
+          ', ' +
+          widget.userBill['fname'] +
+          ' ' +
+          (widget.userBill['mname'] ?? '');
       Map<String, dynamic> paymentData = {
         'data': {
           'attributes': {
@@ -89,8 +88,6 @@ class _UserBillState extends State<UserBill> {
         );
 
         if (res) {
-          print('HUmana');
-
           final successResponse =
               await dio.post('$ip/api/payment/success/mobile',
                   data: {
@@ -125,14 +122,12 @@ class _UserBillState extends State<UserBill> {
       setState(() {
         loading = false;
       });
-      print(e.toString());
     }
   }
 
   @override
   void initState() {
     // TODO: implement initState
-    print(widget.userBill['email']);
   }
 
   @override
@@ -180,30 +175,53 @@ class _UserBillState extends State<UserBill> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Text(
-                  "PREVIOUS READING",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextFormField(
-                  readOnly: true,
-                  decoration:
-                      const InputDecoration(border: OutlineInputBorder()),
-                  controller: TextEditingController(
-                      text: widget.userBill['prev_readings'].toString()),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "PREVIOUS READING",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextFormField(
+                            readOnly: true,
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder()),
+                            controller: TextEditingController(
+                                text: widget.userBill['prev_readings']
+                                    .toString()),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "CURRENT READING",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextFormField(
+                            readOnly: true,
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder()),
+                            controller: TextEditingController(
+                                text: widget.userBill['current_readings']
+                                    .toString()),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
-                ),
-                const Text(
-                  "CURRENT READING",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextFormField(
-                  readOnly: true,
-                  decoration:
-                      const InputDecoration(border: OutlineInputBorder()),
-                  controller: TextEditingController(
-                      text: widget.userBill['current_readings'].toString()),
                 ),
                 const SizedBox(
                   height: 10,
@@ -223,7 +241,7 @@ class _UserBillState extends State<UserBill> {
                   height: 10,
                 ),
                 const Text(
-                  "OTHER FEE",
+                  "OTHER FEE (₱)",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextFormField(
@@ -251,7 +269,7 @@ class _UserBillState extends State<UserBill> {
                   height: 10,
                 ),
                 const Text(
-                  "TOTAL FEE",
+                  "TOTAL FEE (₱)",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextFormField(
@@ -266,7 +284,7 @@ class _UserBillState extends State<UserBill> {
                 ),
                 ElevatedButton.icon(
                   label: const Text(
-                    "PAY",
+                    "PAY (₱)",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {

@@ -93,6 +93,8 @@ class _LoginState extends State<Login> {
           loading = false;
         });
 
+        print(response.data);
+
         if (!context.mounted) return;
 
         ScaffoldMessenger.of(context).hideCurrentSnackBar();

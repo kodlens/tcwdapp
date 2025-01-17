@@ -27,8 +27,8 @@ class _DashboardState extends State<Dashboard> {
   String? name = '';
   String? meterNo = '0';
   String? userId;
-  double? totalBalance = 0.00;
-  var formatter = NumberFormat('#,##,000');
+  String? totalBalance = "0";
+  var formatter = NumberFormat('#,###');
 
   void loadUser() async {
     _pref = await SharedPreferences.getInstance();
@@ -46,13 +46,11 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  void loadBalance() async {
-    dynamic response = await dio.get('$ip/api/get-meter-balance/$meterNo');
-
+  void loadBalance(String mNo) async {
+    //print('$ip/api/get-meter-balance/$mNo');
+    dynamic response = await dio.get('$ip/api/get-meter-balance/$mNo');
     setState(() {
-      var n = formatter.format(response.data['total_pendings']);
-      print('response ${response.data['total_pendings']}');
-      totalBalance = double.parse(n);
+      totalBalance = formatter.format(response.data['total_pendings']);
     });
   }
 
@@ -107,7 +105,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 Text(
-                  '₱ ${totalBalance!.toString()}',
+                  '₱ ${totalBalance == '0' ? '0.00' : totalBalance}',
                   style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w700,
@@ -127,7 +125,7 @@ class _DashboardState extends State<Dashboard> {
                   onChangeValue: (mNo) {
                     setState(() {
                       meterNo = mNo;
-                      loadBalance();
+                      loadBalance(mNo);
                     });
                   })
               : const Text('...'),
