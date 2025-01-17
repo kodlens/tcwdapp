@@ -13,25 +13,46 @@ class HomePage extends StatelessWidget {
         bool? shouldLogout = await showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text("Confirm Logout"),
-            content: const Text("Are you sure you want to log out?"),
+            content: const Padding(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.logout,
+                    size: 30,
+                    color: Colors.red,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text('Are you sure you want to logout?')
+                ],
+              ),
+            ),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context, false); // Don't log out, just stay
                 },
-                child: const Text("Stay"),
+                child: const Text("No"),
               ),
-              TextButton(
+              ElevatedButton.icon(
+                icon: const Icon(Icons.exit_to_app), // The icon
+                label: const Text("Log Out"), // The text
                 onPressed: () {
-                  //Navigator.pop(context, true); // Log out and exit
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => const Login()),
-                    (route) => false, // This removes all previous routes
+                    (route) => false, // Removes all previous routes
                   );
                 },
-                child: const Text("Log Out"),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.red, // Text color
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                ),
               ),
             ],
           ),

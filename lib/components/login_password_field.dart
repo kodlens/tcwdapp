@@ -27,6 +27,7 @@ class _LoginPasswordFieldState extends State<LoginPasswordField> {
         },
         obscureText: _showPassword,
         decoration: InputDecoration(
+          prefixIcon: const Icon(Icons.password),
           border: const OutlineInputBorder(),
           labelText: "Password",
           suffixIcon: GestureDetector(

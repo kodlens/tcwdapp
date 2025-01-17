@@ -17,25 +17,14 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  // void loginSubmit() {
-  //   print("Button click from login");
-  //
-  //
-  //   Navigator.of(context).pushReplacementNamed('/homepage');
-  //
-  // }
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   late SharedPreferences _pref;
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
   final dio = Dio();
-
   final ip = Connection.ip;
-
   bool loading = false;
 
   @override
@@ -43,6 +32,61 @@ class _LoginState extends State<Login> {
     // TODO: implement initState
     super.initState();
     _initPreferences();
+  }
+
+  Future<void> _dialogBuilder(
+    BuildContext context,
+    String dialogTitle,
+    String dialogMSg,
+  ) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(''),
+          content: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.error,
+                  size: 50,
+                  color: Colors.red,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(dialogTitle),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(dialogMSg),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            // TextButton(
+            //   style: TextButton.styleFrom(
+            //     textStyle: Theme.of(context).textTheme.labelLarge,
+            //   ),
+            //   child: const Text('Disable'),
+            //   onPressed: () {
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _initPreferences() async {
@@ -118,20 +162,13 @@ class _LoginState extends State<Login> {
 
         if (e.response != null) {
           final errMsg = e.response!.data['message'].toString();
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(errMsg),
-              backgroundColor: Colors.red.shade300,
-            ));
-          }
-        } else {
-          // Something happened in setting up or sending the request that triggered an Error
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(e.message.toString()),
-              backgroundColor: Colors.red.shade300,
-            ));
-          }
+          // if (context.mounted) {
+          //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //     content: Text(errMsg),
+          //     backgroundColor: Colors.red.shade300,
+          //   ));
+
+          _dialogBuilder(context, 'Error!', errMsg);
         }
       }
     } else {
@@ -185,7 +222,9 @@ class _LoginState extends State<Login> {
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                     child: TextFormField(
                       decoration: const InputDecoration(
-                          border: OutlineInputBorder(), labelText: "Username"),
+                          prefixIcon: Icon(Icons.person_2_outlined),
+                          border: OutlineInputBorder(),
+                          labelText: "Username"),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your username';
@@ -211,8 +250,7 @@ class _LoginState extends State<Login> {
                       "Don't have account yet? Register here",
                       style: TextStyle(
                         color: Colors.blue,
-                        decoration: TextDecoration
-                            .underline, // Adds the link-like effect
+                        // Adds the link-like effect
                       ),
                     ),
                   ),
@@ -228,11 +266,10 @@ class _LoginState extends State<Login> {
                       );
                     },
                     child: const Text(
-                      "Verified Account",
+                      "Verify Account",
                       style: TextStyle(
                         color: Colors.blue,
-                        decoration: TextDecoration
-                            .underline, // Adds the link-like effect
+                        // Adds the link-like effect
                       ),
                     ),
                   ),
