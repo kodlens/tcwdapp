@@ -18,6 +18,7 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
   final consumerDateReading = TextEditingController();
   final consumerNameController = TextEditingController();
   final consumerCurrentReading = TextEditingController();
+
   final dio = Dio();
   String ip = Connection.ip;
   User? selectedUser; // This will store the selected user
@@ -30,9 +31,9 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
       });
 
       final response = await dio.post(
-        '$ip/api/save-user-bills',
+        '$ip/api/store-meter-billing',
         data: {
-          'user_id': selectedUser?.id,
+          'meter_no': selectedUser?.meterNo,
           'readings': consumerCurrentReading.text,
           'reading_date': consumerDateReading.text
         },

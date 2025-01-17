@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tcwdapp/components/login_password_field.dart';
 import 'package:tcwdapp/components/password_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'package:tcwdapp/pages/connection.dart';
 import 'package:tcwdapp/pages/user/registration/registration_page.dart';
+import 'package:tcwdapp/pages/user/verification/verification.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -34,7 +36,7 @@ class _LoginState extends State<Login> {
 
   final ip = Connection.ip;
 
-  bool _isLoading = false;
+  bool loading = false;
 
   @override
   void initState() {
@@ -50,6 +52,7 @@ class _LoginState extends State<Login> {
   // Save a string value to shared preferences
   _saveToSharedPreferences(String value) async {
     //save response (user information)
+
     await _pref.setString('user', value);
 
     final user = jsonDecode(value);
@@ -75,7 +78,7 @@ class _LoginState extends State<Login> {
 
       try {
         setState(() {
-          _isLoading = true;
+          loading = true;
         });
 
         //request
@@ -86,6 +89,9 @@ class _LoginState extends State<Login> {
             'password': passwordController.text
           },
         );
+        setState(() {
+          loading = false;
+        });
 
         if (!context.mounted) return;
 
@@ -97,7 +103,7 @@ class _LoginState extends State<Login> {
         await _saveToSharedPreferences(response.toString());
       } on DioException catch (e) {
         setState(() {
-          _isLoading = false;
+          loading = false;
         });
 
         if (context.mounted) {
@@ -128,7 +134,7 @@ class _LoginState extends State<Login> {
       }
     } else {
       setState(() {
-        _isLoading = false;
+        loading = false;
       });
     }
   }
@@ -187,17 +193,16 @@ class _LoginState extends State<Login> {
                       controller: usernameController,
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  PasswordField(controller: passwordController),
+                  LoginPasswordField(controller: passwordController),
                   const SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => RegistrationPage()),
+                            builder: (context) => const RegistrationPage()),
                       );
                     },
                     child: const Text(
@@ -209,8 +214,28 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const VerificationPage()),
+                      );
+                    },
+                    child: const Text(
+                      "Verified Account",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration
+                            .underline, // Adds the link-like effect
+                      ),
+                    ),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(50),
@@ -224,7 +249,7 @@ class _LoginState extends State<Login> {
                         'LOGIN',
                         style: TextStyle(color: Colors.white),
                       ),
-                      icon: _isLoading
+                      icon: loading
                           ? const SizedBox(
                               height: 20,
                               width: 20,

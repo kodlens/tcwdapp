@@ -16,33 +16,38 @@ class _ReTypePasswordState extends State<ReTypePassword> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: TextFormField(
-        controller: widget.controller,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter your password';
-          } else {
-            return null;
-          }
-        },
-        obscureText: _showPassword,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          labelText: widget.label,
-          suffixIcon: GestureDetector(
-            onTap: () {
-              setState(() => _showPassword = !_showPassword);
-            },
-            child: Icon(
-              _showPassword ? Icons.visibility_off : Icons.visibility,
-              //Icons.visibility,
-              color: Colors.grey,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.label,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        TextFormField(
+          controller: widget.controller,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your password';
+            } else {
+              return null;
+            }
+          },
+          obscureText: _showPassword,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            suffixIcon: GestureDetector(
+              onTap: () {
+                setState(() => _showPassword = !_showPassword);
+              },
+              child: Icon(
+                _showPassword ? Icons.visibility_off : Icons.visibility,
+                //Icons.visibility,
+                color: Colors.grey,
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

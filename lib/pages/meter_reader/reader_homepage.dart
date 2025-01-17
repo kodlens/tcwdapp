@@ -1,12 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:tcwdapp/login.dart';
 import 'package:tcwdapp/pages/meter_reader/components/reading_list.dart';
 import 'package:tcwdapp/pages/meter_reader/meter_reading/add_edit_meter_reading.dart';
+import 'package:tcwdapp/pages/meter_reader/meter_reading/meter_reading.dart';
 
 class ReaderHomePage extends StatelessWidget {
   const ReaderHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        // Show a confirmation dialog when back is pressed
+        bool? shouldLogout = await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Confirm Logout"),
+            content: const Text("Are you sure you want to log out?"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, false); // Don't log out, just stay
+                },
+                child: const Text("Stay"),
+              ),
+              TextButton(
+                onPressed: () {
+                  //Navigator.pop(context, true); // Log out and exit
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Login()),
+                    (route) => false, // This removes all previous routes
+                  );
+                },
+                child: const Text("Log Out"),
+              ),
+            ],
+          ),
+        );
+
+        // If the user chooses to log out, allow the back action
+        return shouldLogout ?? false;
+      },
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: meterReaderScreen(context),
+      ),
+    );
+  }
+
+  Widget meterReaderScreen(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Meter Reader'),

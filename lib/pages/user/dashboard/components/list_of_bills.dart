@@ -9,14 +9,15 @@ import 'package:tcwdapp/pages/user/dashboard/user_bill.dart';
 import '../../../connection.dart';
 import 'package:intl/intl.dart';
 
-class ListOfBill extends StatefulWidget {
-  const ListOfBill({super.key});
+class ListOfBills extends StatefulWidget {
+  final String? meterNo;
+  const ListOfBills({super.key, required this.meterNo});
 
   @override
-  State<ListOfBill> createState() => _ListOfBillState();
+  State<ListOfBills> createState() => _ListOfBillsState();
 }
 
-class _ListOfBillState extends State<ListOfBill> with WidgetsBindingObserver {
+class _ListOfBillsState extends State<ListOfBills> with WidgetsBindingObserver {
   late Future<List<dynamic>> _future;
   final dio = Dio();
   String ip = Connection.ip;
@@ -38,9 +39,20 @@ class _ListOfBillState extends State<ListOfBill> with WidgetsBindingObserver {
     _pref = await SharedPreferences.getInstance();
     userAccount = _pref.getString('user') ?? '{}';
     user = jsonDecode(userAccount);
-    int userId = user['user']['id'];
-    dynamic response = await dio.get('$ip/api/user-bills/$userId');
+
+    dynamic response =
+        await dio.get('$ip/api/get-meter-bills/${widget.meterNo}');
     return response.data;
+  }
+
+  @override
+  void didUpdateWidget(ListOfBills oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Check if the userId has changed, and refresh data if so
+    if (widget.meterNo != oldWidget.meterNo) {
+      refreshData();
+    }
   }
 
   Future<void> refreshData() async {
@@ -87,7 +99,7 @@ class _ListOfBillState extends State<ListOfBill> with WidgetsBindingObserver {
             if (data.isEmpty) {
               return const Padding(
                 padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
-                child: Text('No billing available...'),
+                child: Text('No billings are available...'),
               );
             }
 
@@ -213,7 +225,7 @@ class _ListOfBillState extends State<ListOfBill> with WidgetsBindingObserver {
                               Padding(
                                 padding: const EdgeInsets.all(0),
                                 child: Text(
-                                  formatter.format(data[index]['total'] ?? ''),
+                                  "₱ ${formatter.format(data[index]['total'] ?? '')}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge

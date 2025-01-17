@@ -108,7 +108,7 @@ class _TransctionCardState extends State<TransctionCard> {
                 Padding(
                   padding: const EdgeInsets.only(left: 5.0, bottom: 0),
                   child: Text(
-                    formatter.format(widget.data[widget.index]['amount']),
+                    "₱ ${formatter.format(widget.data[widget.index]['amount'])}",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 18,
                           fontWeight: FontWeight.normal,

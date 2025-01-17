@@ -25,6 +25,7 @@ class StartPage extends StatelessWidget {
         //'/': (context) => HomePage(),
         //register the routes here...
         '/homepage': (context) => const HomePage(),
+        '/login': (context) => const Login(),
         '/reader_homepage': (context) => const ReaderHomePage(),
         '/meter-reading': (context) => const MeterReading(),
         '/add-edit-meter-reading': (context) => const AddEditMeterReading(),

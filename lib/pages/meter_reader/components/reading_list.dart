@@ -275,7 +275,7 @@ class _ReadingListState extends State<ReadingList> {
                                     padding: const EdgeInsets.only(
                                         left: 5.0, bottom: 0),
                                     child: Text(
-                                      "${data[index]['original_bill']}",
+                                      "₱ ${data[index]['original_bill']}",
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge

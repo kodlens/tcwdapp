@@ -4,7 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tcwdapp/pages/user/dashboard/components/list_of_bill.dart';
+import 'package:tcwdapp/pages/user/dashboard/components/list_of_bills.dart';
+import 'package:tcwdapp/pages/user/dashboard/components/user_meter_dropdown.dart';
 
 import '../../connection.dart';
 
@@ -23,9 +24,10 @@ class _DashboardState extends State<Dashboard> {
   late SharedPreferences _pref;
   late Map<String, dynamic> user;
   late String userAccount;
-  late String name = '';
-  late String meterNo = '';
-  late String totalBalance = "0";
+  String? name = '';
+  String? meterNo = '0';
+  String? userId;
+  double? totalBalance = 0.00;
   var formatter = NumberFormat('#,##,000');
 
   void loadUser() async {
@@ -33,18 +35,24 @@ class _DashboardState extends State<Dashboard> {
     userAccount = _pref.getString('user') ?? '{}';
     setState(() {
       user = jsonDecode(userAccount)["user"];
-      name = user['lname'] + ', ' + user['fname'] + ' ' + user['mname'];
-      meterNo = user['meter_no'];
-    });
+      //print(user['mname'] != null ? 'not null sia' : 'null sia');
 
-    loadBalance(user);
+      name =
+          "${user['lname'].toString().toUpperCase()},  ${user['fname'].toString().toUpperCase()} ${(user['mname'] != null ? user['mname'].toString().toUpperCase() : '')}";
+
+      userId = user['id'].toString();
+
+      //print(user);
+    });
   }
 
-  void loadBalance(dynamic myUser) async {
-    dynamic response = await dio.get('$ip/api/user-bill-sum/${myUser["id"]}');
+  void loadBalance() async {
+    dynamic response = await dio.get('$ip/api/get-meter-balance/$meterNo');
 
     setState(() {
-      totalBalance = formatter.format(response.data['total_pendings']);
+      var n = formatter.format(response.data['total_pendings']);
+      print('response ${response.data['total_pendings']}');
+      totalBalance = double.parse(n);
     });
   }
 
@@ -65,30 +73,11 @@ class _DashboardState extends State<Dashboard> {
           elevation: 0,
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(30, 30, 10, 30),
+            padding: const EdgeInsets.fromLTRB(30, 0, 10, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  'Meter No.',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  meterNo,
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 const Text(
                   'Name',
                   textAlign: TextAlign.left,
@@ -118,7 +107,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 Text(
-                  totalBalance,
+                  '₱ ${totalBalance!.toString()}',
                   style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w700,
@@ -127,6 +116,21 @@ class _DashboardState extends State<Dashboard> {
               ],
             ),
           ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+          child: userId != null
+              ? UserMeterDropdown(
+                  label: "METER NO.",
+                  hint: "Select Meter No.",
+                  userId: userId ?? '',
+                  onChangeValue: (mNo) {
+                    setState(() {
+                      meterNo = mNo;
+                      loadBalance();
+                    });
+                  })
+              : const Text('...'),
         ),
         const SizedBox(
           height: 20,
@@ -138,8 +142,10 @@ class _DashboardState extends State<Dashboard> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
-        const Expanded(
-          child: ListOfBill(),
+        Expanded(
+          child: ListOfBills(
+            meterNo: meterNo,
+          ),
         )
       ],
     );
