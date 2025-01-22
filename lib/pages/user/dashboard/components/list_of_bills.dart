@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tcwdapp/pages/user/dashboard/user_bill.dart';
@@ -26,6 +25,7 @@ class _ListOfBillsState extends State<ListOfBills> with WidgetsBindingObserver {
   late String userAccount;
   var formatter = NumberFormat('#,###');
 
+  final double paddingLeft = 20;
   @override
   void initState() {
     // TODO: implement initState
@@ -109,8 +109,18 @@ class _ListOfBillsState extends State<ListOfBills> with WidgetsBindingObserver {
                 itemCount: data.length, // Number of items in the list
                 itemBuilder: (context, index) {
                   return Card(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero),
+                    color: Colors.white,
+                    elevation: 0,
+                    margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: const BorderSide(
+                        color: Colors.blue, // Border color
+                        width: 1.0, // Border width
+                        style: BorderStyle
+                            .solid, // Border style (solid, dashed, etc.)
+                      ),
+                    ),
                     child: InkWell(
                       onTap: () {
                         Navigator.push(
@@ -130,8 +140,8 @@ class _ListOfBillsState extends State<ListOfBills> with WidgetsBindingObserver {
                               //Billing date
                               // Billing Date
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 5, bottom: 0, top: 5),
+                                padding: EdgeInsets.only(
+                                    left: paddingLeft, bottom: 0, top: 5),
                                 child: Text(
                                   "BILLING DATE",
                                   style: Theme.of(context)
@@ -145,8 +155,8 @@ class _ListOfBillsState extends State<ListOfBills> with WidgetsBindingObserver {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 5.0, bottom: 12.0),
+                                padding: EdgeInsets.only(
+                                    left: paddingLeft, bottom: 12.0),
                                 child: Text(
                                   DateFormat('MMM. dd, yyyy').format(
                                     DateTime.parse(data[index]
@@ -167,8 +177,8 @@ class _ListOfBillsState extends State<ListOfBills> with WidgetsBindingObserver {
 
                               //DUE DATE
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5, bottom: 0),
+                                padding: EdgeInsets.only(
+                                    left: paddingLeft, bottom: 0),
                                 child: Text(
                                   "DUE DATE",
                                   style: Theme.of(context)
@@ -182,8 +192,8 @@ class _ListOfBillsState extends State<ListOfBills> with WidgetsBindingObserver {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5.0, bottom: 5),
+                                padding: EdgeInsets.only(
+                                    left: paddingLeft, bottom: 5),
                                 child: Text(
                                   DateFormat('MMM. dd, yyyy').format(
                                     DateTime.parse(
@@ -207,23 +217,19 @@ class _ListOfBillsState extends State<ListOfBills> with WidgetsBindingObserver {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5, bottom: 0),
-                                child: Text(
-                                  "TOTAL",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall
-                                      ?.copyWith(
-                                        color: Colors.grey[
-                                            600], // Lighter text for label
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
+                              Text(
+                                "TOTAL",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
+                                      color: Colors
+                                          .grey[600], // Lighter text for label
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(0),
+                                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                                 child: Text(
                                   "₱ ${formatter.format(data[index]['total'] ?? '')}",
                                   style: Theme.of(context)

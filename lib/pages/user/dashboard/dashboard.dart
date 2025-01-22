@@ -63,89 +63,96 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Card(
-          color: Colors.cyan,
-          elevation: 0,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(30, 0, 10, 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 10),
-                const Text(
-                  'Name',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
+    return Container(
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                    'assets/images/header-logo.jpg'), // Path to your background image
+                fit: BoxFit.cover,
+              ), // Ensure the image covers the entire screen
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(30, 0, 40, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Name',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                Text(
-                  name ?? '',
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  'Current Balance',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  '₱ ${totalBalance == '0' ? '0.00' : totalBalance}',
-                  style: const TextStyle(
-                      fontSize: 30,
+                  Text(
+                    name ?? '',
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                      fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white),
-                ),
-              ],
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    'Current Balance',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    '₱ ${totalBalance == '0' ? '0.00' : totalBalance}',
+                    style: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-          child: userId != null
-              ? UserMeterDropdown(
-                  label: "METER NO.",
-                  hint: "Select Meter No.",
-                  userId: userId ?? '',
-                  onChangeValue: (mNo) {
-                    setState(() {
-                      meterNo = mNo;
-                      loadBalance(mNo);
-                    });
-                  })
-              : const Text('...'),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-          child: Text(
-            "BILLINGS",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+            child: userId != null
+                ? UserMeterDropdown(
+                    label: "METER NO.",
+                    hint: "Select Meter No.",
+                    userId: userId ?? '',
+                    onChangeValue: (mNo) {
+                      setState(() {
+                        meterNo = mNo;
+                        loadBalance(mNo);
+                      });
+                    })
+                : const Text('...'),
           ),
-        ),
-        Expanded(
-          child: ListOfBills(
-            meterNo: meterNo,
+          const SizedBox(
+            height: 20,
           ),
-        )
-      ],
+          const Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Text(
+              "BILLINGS",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(
+            child: ListOfBills(
+              meterNo: meterNo,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

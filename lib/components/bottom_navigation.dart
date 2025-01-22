@@ -80,7 +80,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 1,
-        backgroundColor: Colors.cyan[600],
+        backgroundColor: const Color(0xFF12509D),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
@@ -102,6 +102,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.yellow[200],
         onTap: _onItemTapped,
+        iconSize: 20,
         unselectedItemColor: Colors.white,
         unselectedLabelStyle:
             const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),

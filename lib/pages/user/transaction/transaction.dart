@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tcwdapp/pages/connection.dart';
+import 'package:tcwdapp/pages/theme_color.dart';
 
 import 'components/transaction_card.dart';
 
@@ -51,55 +52,57 @@ class _TransactionState extends State<Transaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Card(
-              color: Colors.cyan,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
-                child: Text(
-                  'TRANSACTION',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.white),
+    return Container(
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                color: ThemeColor.blueColor,
+                child: const Padding(
+                  padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
+                  child: Text(
+                    'TRANSACTION',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.white),
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Expanded(
-          child: FutureBuilder(
-            future: _future,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: CircularProgressIndicator()),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              } else {
-                final data = snapshot.data!;
-                return ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return TransctionCard(data: data, index: index);
-                  },
-                );
-              }
-            },
+            ],
           ),
-        )
-      ],
+          Expanded(
+            child: FutureBuilder(
+              future: _future,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: CircularProgressIndicator()),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else {
+                  final data = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      return TransctionCard(data: data, index: index);
+                    },
+                  );
+                }
+              },
+            ),
+          )
+        ],
+      ),
     );
   }
 }

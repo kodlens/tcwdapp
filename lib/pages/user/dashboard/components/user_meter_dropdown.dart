@@ -102,8 +102,8 @@ class _UserMeterDropdownState extends State<UserMeterDropdown> {
                         child: Container(
                           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                           decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.black45), // Border color
+                            border:
+                                Border.all(color: Colors.blue), // Border color
                             borderRadius:
                                 BorderRadius.circular(5), // Rounded corners
                           ),
