@@ -42,6 +42,7 @@ class _ListOfBillsState extends State<ListOfBills> with WidgetsBindingObserver {
 
     dynamic response =
         await dio.get('$ip/api/get-meter-bills/${widget.meterNo}');
+
     return response.data;
   }
 

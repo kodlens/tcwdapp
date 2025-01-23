@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tcwdapp/login.dart';
 import 'package:tcwdapp/pages/homepage.dart';
 import 'package:tcwdapp/pages/meter_reader/meter_reading/add_edit_meter_reading.dart';
-import 'package:tcwdapp/pages/meter_reader/meter_reading/consumer_list.dart';
 import 'package:tcwdapp/pages/meter_reader/reader_homepage.dart';
 
 import 'pages/meter_reader/meter_reading/meter_reading.dart';

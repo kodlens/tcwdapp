@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:tcwdapp/classes/user.dart';
 import 'package:tcwdapp/pages/meter_reader/meter_reading/consumer_list.dart';
+import 'package:tcwdapp/pages/theme_style.dart';
 
 import '../../connection.dart';
 
@@ -208,7 +209,7 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
                               minimumSize: const Size(80, 50),
                               iconColor: Colors.white,
                               foregroundColor: Colors.white,
-                              backgroundColor: Colors.cyan),
+                              backgroundColor: ThemeStyle.blueColor),
                           icon: const Icon(Icons.search),
                         ),
                       ],
@@ -257,7 +258,7 @@ class _AddEditMeterReadingState extends State<AddEditMeterReading> {
                           minimumSize: const Size.fromHeight(50),
                           iconColor: Colors.white,
                           foregroundColor: Colors.white,
-                          backgroundColor: Colors.cyan),
+                          backgroundColor: ThemeStyle.blueColor),
                       icon: loading
                           ? const SizedBox(
                               height: 20,

@@ -3,6 +3,7 @@ import 'package:tcwdapp/login.dart';
 import 'package:tcwdapp/pages/meter_reader/components/reading_list.dart';
 import 'package:tcwdapp/pages/meter_reader/meter_reading/add_edit_meter_reading.dart';
 import 'package:tcwdapp/pages/meter_reader/meter_reading/meter_reading.dart';
+import 'package:tcwdapp/pages/theme_style.dart';
 
 class ReaderHomePage extends StatelessWidget {
   const ReaderHomePage({super.key});
@@ -81,10 +82,16 @@ class ReaderHomePage extends StatelessWidget {
   Widget meterReaderScreen(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Meter Reader'),
-          backgroundColor: Colors.cyan[600],
+          title: const Text(
+            'Meter Reader',
+            style: TextStyle(color: Colors.white),
+          ),
+          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: ThemeStyle.blueColor,
         ),
+        backgroundColor: Colors.white,
         drawer: Drawer(
+          backgroundColor: Colors.white,
           // Add a ListView to the drawer. This ensures the user can scroll
           // through the options in the drawer if there isn't enough vertical
           // space to fit everything.
@@ -92,15 +99,16 @@ class ReaderHomePage extends StatelessWidget {
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: [
-              const DrawerHeader(
+              DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: ThemeStyle.blueColor,
                 ),
-                child: Text('MENU', style: TextStyle(color: Colors.white)),
+                child:
+                    const Text('MENU', style: TextStyle(color: Colors.white)),
               ),
               ListTile(
-                leading: const Icon(Icons.electric_meter,
-                    color: Colors.cyan), // Icon here
+                leading: Icon(Icons.electric_meter,
+                    color: ThemeStyle.blueColor), // Icon here
                 title: const Text('New Reading'),
                 onTap: () {
                   // Update the state of the app.
@@ -109,8 +117,8 @@ class ReaderHomePage extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading:
-                    const Icon(Icons.logout, color: Colors.cyan), // Icon here
+                leading: Icon(Icons.logout,
+                    color: ThemeStyle.blueColor), // Icon here
                 title: const Text('LOGOUT'),
                 onTap: () {
                   // Update the state of the app.
@@ -138,7 +146,7 @@ class ReaderHomePage extends StatelessWidget {
               minimumSize: const Size(80, 50),
               iconColor: Colors.white,
               foregroundColor: Colors.white,
-              backgroundColor: Colors.cyan),
+              backgroundColor: ThemeStyle.blueColor),
           icon: const Icon(Icons.add),
         ),
         body: const ReadingList());

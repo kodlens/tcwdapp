@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tcwdapp/pages/connection.dart';
-import 'package:tcwdapp/pages/theme_color.dart';
+import 'package:tcwdapp/pages/theme_style.dart';
 
 import 'components/transaction_card.dart';
 
@@ -61,7 +61,7 @@ class _TransactionState extends State<Transaction> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                color: ThemeColor.blueColor,
+                color: ThemeStyle.blueColor,
                 child: const Padding(
                   padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
                   child: Text(

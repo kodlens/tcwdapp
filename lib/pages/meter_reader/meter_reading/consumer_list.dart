@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:tcwdapp/classes/user.dart';
 import 'package:tcwdapp/pages/connection.dart';
+import 'package:tcwdapp/pages/theme_style.dart';
 
 class ConsumerList extends StatefulWidget {
   final Function(User) onUserSelected;
@@ -48,7 +49,9 @@ class _ConsumerListState extends State<ConsumerList>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text("Consumers"),
       ),
       body: SafeArea(
@@ -63,7 +66,7 @@ class _ConsumerListState extends State<ConsumerList>
                       controller: searchTextController,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: "Search Name..."),
+                          labelText: "Search Name/Meter no..."),
                     ),
                   ),
                   const SizedBox(
@@ -83,7 +86,7 @@ class _ConsumerListState extends State<ConsumerList>
                         minimumSize: const Size(80, 50),
                         iconColor: Colors.white,
                         foregroundColor: Colors.white,
-                        backgroundColor: Colors.cyan),
+                        backgroundColor: ThemeStyle.blueColor),
                     icon: const Icon(Icons.search),
                   ),
                 ],
@@ -109,25 +112,53 @@ class _ConsumerListState extends State<ConsumerList>
                         child: ListView(
                           children: data
                               .map(
-                                (item) => InkWell(
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                    child: Text(item['lname'] +
-                                        ', ' +
-                                        item['fname'] +
-                                        ' (' +
-                                        item['meter_no'] +
-                                        ')'),
+                                (item) => Card(
+                                  color: Colors.white,
+                                  elevation: 0,
+                                  margin: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: const BorderSide(
+                                      color: Colors.blue, // Border color
+                                      width: 1.0, // Border width
+                                      style: BorderStyle
+                                          .solid, // Border style (solid, dashed, etc.)
+                                    ),
                                   ),
-                                  onTap: () {
-                                    widget.onUserSelected(User(
-                                        fname: item['fname'].toString(),
-                                        lname: item['lname'].toString(),
-                                        mname: item['mname'].toString(),
-                                        id: item['id'].toString(),
-                                        meterNo: item['meter_no']));
-                                  },
+                                  child: InkWell(
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'NAME',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            const SizedBox(height: 5),
+                                            Text(item['lname'] +
+                                                ', ' +
+                                                item['fname']),
+                                            const SizedBox(height: 10),
+                                            const Text(
+                                              'METER NO',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            Text(item['meter_no']),
+                                          ],
+                                        )),
+                                    onTap: () {
+                                      widget.onUserSelected(User(
+                                          fname: item['fname'].toString(),
+                                          lname: item['lname'].toString(),
+                                          mname: item['mname'].toString(),
+                                          id: item['id'].toString(),
+                                          meterNo: item['meter_no']));
+                                    },
+                                  ),
                                 ),
                               )
                               .toList(),

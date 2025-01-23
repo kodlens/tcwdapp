@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-import 'package:tcwdapp/pages/theme_color.dart';
+import 'package:tcwdapp/pages/theme_style.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -45,7 +45,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 /*==============PAGE TITLE=====================*/
                 Container(
-                  color: ThemeColor.blueColor,
+                  color: ThemeStyle.blueColor,
                   child: const Padding(
                     padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
                     child: Text(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PasswordField extends StatefulWidget {
-  final controller;
-  final label;
+  final dynamic controller;
+  final String? label;
 
   const PasswordField({super.key, this.controller, this.label});
 
@@ -20,7 +20,7 @@ class _PasswordFieldState extends State<PasswordField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          widget.label,
+          widget.label!,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         TextFormField(

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tcwdapp/pages/connection.dart';
+import 'package:tcwdapp/pages/theme_style.dart';
 
 import 'package:tcwdapp/pages/user/dashboard/checkout.dart';
 
@@ -19,6 +20,7 @@ class _UserBillState extends State<UserBill> {
   final String paymongoKey = Connection.paymongoKey;
   final String ip = Connection.ip;
   final dio = Dio();
+  var formatter = NumberFormat('#,###');
 
   void pay() async {
     setState(() {
@@ -134,179 +136,190 @@ class _UserBillState extends State<UserBill> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text("Bill Information"),
       ),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "READING DATE",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextFormField(
-                  controller: TextEditingController(
-                      text: DateFormat('MMM. dd, yyyy').format(
-                    DateTime.parse(widget.userBill['reading_date']),
-                  )),
-                  readOnly: true,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: ""),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  "DUE DATE",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextFormField(
-                  readOnly: true,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: ""),
-                  controller: TextEditingController(
-                      text: DateFormat('MMM. dd, yyyy').format(
-                    DateTime.parse(widget.userBill['due_date']),
-                  )),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "PREVIOUS READING",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextFormField(
-                            readOnly: true,
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder()),
-                            controller: TextEditingController(
-                                text: widget.userBill['prev_readings']
-                                    .toString()),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "CURRENT READING",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextFormField(
-                            readOnly: true,
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder()),
-                            controller: TextEditingController(
-                                text: widget.userBill['current_readings']
-                                    .toString()),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  "OVER DUE",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextFormField(
-                  readOnly: true,
-                  decoration:
-                      const InputDecoration(border: OutlineInputBorder()),
-                  controller: TextEditingController(
-                      text: widget.userBill['is_overdue'] == 1 ? 'YES' : 'NO'),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  "OTHER FEE (₱)",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextFormField(
-                  readOnly: true,
-                  decoration:
-                      const InputDecoration(border: OutlineInputBorder()),
-                  controller: TextEditingController(
-                      text: widget.userBill['add_fees_sum'].toString()),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  "FEE",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextFormField(
-                  readOnly: true,
-                  decoration:
-                      const InputDecoration(border: OutlineInputBorder()),
-                  controller: TextEditingController(
-                      text: widget.userBill['original_bill'].toString()),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  "TOTAL FEE (₱)",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextFormField(
-                  readOnly: true,
-                  decoration:
-                      const InputDecoration(border: OutlineInputBorder()),
-                  controller: TextEditingController(
-                      text: widget.userBill['total'].toString()),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                ElevatedButton.icon(
-                  label: const Text(
-                    "PAY (₱)",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+          child: Card(
+            color: const Color.fromARGB(255, 255, 255, 255),
+            elevation: 0,
+            margin: const EdgeInsets.all(20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: const BorderSide(
+                color: Colors.blue, // Border color
+                width: 1.0, // Border width
+                style: BorderStyle.solid, // Border style (solid, dashed, etc.)
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "OVER DUE",
+                    style: ThemeStyle.labelStyle,
                   ),
-                  onPressed: () {
-                    pay();
-                  },
-                  style: ElevatedButton.styleFrom(
+                  Text(
+                    widget.userBill['is_overdue'] == 1 ? 'YES' : 'NO',
+                    style: ThemeStyle.outputStyle,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  /* ====================================================== */
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "READING DATE",
+                            style: ThemeStyle.labelStyle,
+                          ),
+                          Text(
+                              DateFormat('MMM. dd, yyyy').format(DateTime.parse(
+                                  widget.userBill['reading_date'])),
+                              style: ThemeStyle.outputStyle),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "PREVIOUS READING",
+                            style: ThemeStyle.labelStyle,
+                          ),
+                          Text(
+                            widget.userBill['prev_readings'].toString(),
+                            style: ThemeStyle.outputStyle,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 40,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "DUE DATE",
+                            style: ThemeStyle.labelStyle,
+                          ),
+                          Text(
+                            DateFormat('MMM. dd, yyyy').format(
+                                DateTime.parse(widget.userBill['due_date'])),
+                            style: ThemeStyle.outputStyle,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "CURRENT READING",
+                            style: ThemeStyle.labelStyle,
+                          ),
+                          Text(
+                            widget.userBill['current_readings'].toString(),
+                            style: ThemeStyle.outputStyle,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+
+                  /* ====================================================== */
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "OTHER FEE",
+                    style: ThemeStyle.labelStyle,
+                  ),
+                  Text(
+                    "₱ ${formatter.format(widget.userBill['total_add_fees'])}",
+                    style: ThemeStyle.outputStyle,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 50),
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount:
+                              widget.userBill['additional_fees_details'].length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.userBill['additional_fees_details']
+                                      [index]['title'],
+                                  style: ThemeStyle.labelStyle,
+                                ),
+                                Text(
+                                  "₱ ${formatter.format(widget.userBill['additional_fees_details'][index]['amount'])}",
+                                  style: ThemeStyle.smallOutputStyle,
+                                ),
+                              ],
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "FEE",
+                    style: ThemeStyle.labelStyle,
+                  ),
+                  Text(
+                    "₱ ${widget.userBill['original_bill'].toString()}",
+                    style: ThemeStyle.outputStyle,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text("TOTAL FEE", style: ThemeStyle.labelStyle),
+                  Text("₱ ${formatter.format(widget.userBill['total'])}",
+                      style: ThemeStyle.outputStyle),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ElevatedButton.icon(
+                    label: const Text(
+                      "PAY (₱)",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      pay();
+                    },
+                    style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
                       iconColor: Colors.white,
                       foregroundColor: Colors.white,
-                      backgroundColor: Colors.cyan),
-                  icon: loading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 3,
-                          ),
-                        )
-                      : const Icon(Icons.payment),
-                )
-              ],
+                      backgroundColor: ThemeStyle.blueColor,
+                    ),
+                    icon: loading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 3,
+                            ),
+                          )
+                        : const Icon(Icons.payment),
+                  )
+                ],
+              ),
             ),
           ),
         ),

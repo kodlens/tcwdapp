@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tcwdapp/components/text_stroke.dart';
 import 'package:tcwdapp/components/login_password_field.dart';
-import 'package:tcwdapp/components/password_field.dart';
+//import 'package:tcwdapp/components/password_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'package:tcwdapp/pages/connection.dart';
-import 'package:tcwdapp/pages/theme_color.dart';
+import 'package:tcwdapp/pages/theme_style.dart';
 import 'package:tcwdapp/pages/user/registration/registration_page.dart';
 import 'package:tcwdapp/pages/user/verification/verification.dart';
 
@@ -56,6 +56,7 @@ class _LoginState extends State<Login> {
                   size: 50,
                   color: Colors.red,
                 ),
+                //Text(Connection.ip),
                 const SizedBox(
                   height: 10,
                 ),
@@ -181,138 +182,136 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Form(
-          key: _formKey,
-          child: SafeArea(
-              child: Expanded(
-            child: Center(
-              child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                        'assets/images/bg-login.jpg'), // Path to your background image
-                    fit: BoxFit.cover,
-                  ), // Ensure the image covers the entire screen
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Image(
-                        image: AssetImage('assets/images/tcwd-logo.png'),
-                        height: 120),
-                    const SizedBox(height: 1),
-                    TextStroke(
-                        text: "TANGUB CITY",
-                        textFontSize: 30,
-                        textFontWeight: FontWeight.w900,
-                        textColor: const Color(0xFF12509D),
-                        strokeColor: Colors.white,
-                        strokeWidth: 6),
-                    TextStroke(
-                        text: "WATER DISTRICT",
-                        textFontSize: 30,
-                        textFontWeight: FontWeight.w900,
-                        textColor: ThemeColor.blueColor,
-                        strokeColor: Colors.white,
-                        strokeWidth: 6),
-                    const SizedBox(
-                      height: 1,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(50, 20, 50, 0),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                            filled: true, // Set this to true
-                            fillColor: Colors.white, // Set the background color
-                            prefixIcon: Icon(Icons.person_2_outlined),
-                            border: OutlineInputBorder(),
-                            labelText: "Username"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your username';
-                          }
-                          return null;
-                        },
-                        controller: usernameController,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(50, 20, 50, 0),
-                      child: LoginPasswordField(controller: passwordController),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const RegistrationPage()),
-                        );
-                      },
-                      child: const Text(
-                        "Don't have account yet? Register here",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          // Adds the link-like effect
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const VerificationPage()),
-                        );
-                      },
-                      child: const Text(
-                        "Verify Account",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          // Adds the link-like effect
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(50, 30, 50, 0),
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(50),
-                          elevation: 0,
-                          backgroundColor: const Color(0xFF12509D),
-                        ),
-                        onPressed: () {
-                          loginSubmit();
-                        },
-                        label: const Text(
-                          'Log In',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.w600),
-                        ),
-                        icon: loading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 3,
-                                ),
-                              )
-                            : const Icon(
-                                Icons.login,
-                                color: Colors.white,
-                              ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+        key: _formKey,
+        child: Center(
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                    'assets/images/bg-login.jpg'), // Path to your background image
+                fit: BoxFit.cover,
+              ), // Ensure the image covers the entire screen
             ),
-          ))),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Image(
+                    image: AssetImage('assets/images/tcwd-logo.png'),
+                    height: 120),
+                const SizedBox(height: 1),
+                TextStroke(
+                    text: "TANGUB CITY",
+                    textFontSize: 30,
+                    textFontWeight: FontWeight.w900,
+                    textColor: const Color(0xFF12509D),
+                    strokeColor: Colors.white,
+                    strokeWidth: 6),
+                TextStroke(
+                    text: "WATER DISTRICT",
+                    textFontSize: 30,
+                    textFontWeight: FontWeight.w900,
+                    textColor: ThemeStyle.blueColor,
+                    strokeColor: Colors.white,
+                    strokeWidth: 6),
+                const SizedBox(
+                  height: 1,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(50, 20, 50, 0),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                        filled: true, // Set this to true
+                        fillColor: Colors.white, // Set the background color
+                        prefixIcon: Icon(Icons.person_2_outlined),
+                        border: OutlineInputBorder(),
+                        labelText: "Username"),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your username';
+                      }
+                      return null;
+                    },
+                    controller: usernameController,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(50, 20, 50, 0),
+                  child: LoginPasswordField(controller: passwordController),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegistrationPage()),
+                    );
+                  },
+                  child: const Text(
+                    "Don't have account yet? Register here",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      // Adds the link-like effect
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const VerificationPage()),
+                    );
+                  },
+                  child: const Text(
+                    "Verify Account",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      // Adds the link-like effect
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(50, 30, 50, 0),
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(50),
+                      elevation: 0,
+                      backgroundColor: const Color(0xFF12509D),
+                    ),
+                    onPressed: () {
+                      loginSubmit();
+                    },
+                    label: const Text(
+                      'Log In',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                    icon: loading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 3,
+                            ),
+                          )
+                        : const Icon(
+                            Icons.login,
+                            color: Colors.white,
+                          ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
